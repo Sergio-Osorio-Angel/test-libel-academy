@@ -1,30 +1,24 @@
 import { useRef } from 'react';
-import { Item } from './Item';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
+
 import 'swiper/css';
-import 'swiper/css/navigation';
 
+import { Item } from './Item';
 
-export const ListItems = ({id, showList=false, category, number}) => {
+export const ListItems = ({ id, showList = false, category, number }) => {
 
-    const navigationPrevRef = useRef(null);
-    const navigationNextRef = useRef(null);
+    const swiperRef = useRef();
 
     return (
-        <div className={`list-items ${showList ? 'list-active':''}`} id={id}>
+        <div className={`list-items ${showList ? 'list-active' : ''}`} id={id}>
             <div className='container-carrousel'>
                 <Swiper
                     spaceBetween={15}
                     slidesPerView={6}
                     modules={[Navigation]}
-                    navigation={{
-                        prevEl: navigationPrevRef.current,
-                        nextEl: navigationNextRef.current,
-                    }}
                     onBeforeInit={(swiper) => {
-                        swiper.params.navigation.prevEl = navigationPrevRef.current;
-                        swiper.params.navigation.nextEl = navigationNextRef.current;
+                        swiperRef.current = swiper;
                     }}
                 >
                     <SwiperSlide><Item url="/assets/164x240.png" description="Action, 2016" title={`Den of Thieves ${number}`} /></SwiperSlide>
@@ -41,12 +35,12 @@ export const ListItems = ({id, showList=false, category, number}) => {
                 <span className='sep-bar'></span>
                 <h2 className="tl-info-list">{category}</h2>
                 <div className="container-navigator-list">
-                    <div ref={navigationPrevRef}>
+                    <button type='button' onClick={() => swiperRef.current?.slidePrev()} >
                         <img src="/assets/arrow-left.png" alt="Prev" />
-                    </div>
-                    <div ref={navigationNextRef}>
+                    </button>
+                    <button type='button' onClick={() => swiperRef.current?.slideNext()}>
                         <img src="/assets/arrow-rigth.png" alt="Next" />
-                    </div>
+                    </button>
                 </div>
                 <hr />
                 <a href="#">View all &gt;</a>
